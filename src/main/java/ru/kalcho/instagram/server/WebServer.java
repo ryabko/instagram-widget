@@ -2,9 +2,6 @@ package ru.kalcho.instagram.server;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
-import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
-import com.sun.jersey.api.core.PackagesResourceConfig;
-import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -12,10 +9,8 @@ import ru.kalcho.instagram.Instagram;
 import ru.kalcho.instagram.response.Images;
 import ru.kalcho.instagram.response.Response;
 
-import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URI;
 
 /**
  *
@@ -35,12 +30,6 @@ public class WebServer {
         server.stop(5);
     }
 
-    private void init2() throws IOException {
-        ResourceConfig rc = new PackagesResourceConfig("ru.kalcho.instagram.server");
-        URI uri = UriBuilder.fromUri("http://localhost/").port(9998).build();
-        GrizzlyServerFactory.createHttpServer(uri, rc);
-    }
-
     private static class RequestHandler implements HttpHandler {
 
         @Override
@@ -55,9 +44,6 @@ public class WebServer {
                     response = "404 Not Found";
                     exchange.sendResponseHeaders(404, response.length());
                 }
-//                if (1 == 1)
-//                    throw new IllegalArgumentException();
-
                 exchange.getResponseBody().write(response.getBytes());
             } catch (Throwable e) {
                 e.printStackTrace();

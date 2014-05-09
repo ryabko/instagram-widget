@@ -33,14 +33,6 @@ public class Instagram {
     }
 
     public Response recentMedia(String userId, int count) {
-//        Client client = Client.create();
-//        WebResource resource = client.resource(INSTAGRAM_URL);
-//
-//        resource = resource.path("users/" + userId + "/media/recent");
-//        resource = resource.queryParam("client_id", clientId);
-//        resource = resource.queryParam("count", String.valueOf(count));
-//        String result = resource.get(String.class);
-
         HttpClient httpClient = new HttpClient();
         Map<String, String> params = new HashMap<>();
         params.put("client_id", clientId);
@@ -53,8 +45,6 @@ public class Instagram {
             e.printStackTrace();
         }
         return null;
-
-//        return jsonParser.fromJson(result, Response.class);
     }
 
 }
