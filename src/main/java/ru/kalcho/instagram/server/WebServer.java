@@ -19,15 +19,11 @@ public class WebServer {
 
     HttpServer server;
 
-    public void start() throws IOException {
-        server = HttpServer.create(new InetSocketAddress(8000), 0);
+    public void start(int port) throws IOException {
+        server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new RequestHandler());
         server.setExecutor(null);
         server.start();
-    }
-
-    public void stop() {
-        server.stop(5);
     }
 
     private static class RequestHandler implements HttpHandler {
@@ -72,8 +68,11 @@ public class WebServer {
     }
 
     public static void main(String[] args) throws IOException {
+        String portProperty = System.getProperty("http.port");
+        Integer port = portProperty != null ? Integer.valueOf(portProperty) : 8000;
+
         WebServer ws = new WebServer();
-        ws.start();
+        ws.start(port);
     }
 
 }
