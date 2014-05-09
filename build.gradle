@@ -12,3 +12,17 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+jar {
+    manifest.attributes("Main-Class": "ru.kalcho.instagram.server.WebServer")
+    manifest.attributes("Class-Path": configurations.runtime.collect { it.name }.join(' '))
+}
+
+task dist(dependsOn: jar, type: Zip) {
+    from jar.outputs.files
+    from configurations.runtime
+}
+
+artifacts {
+    archives dist
+}
