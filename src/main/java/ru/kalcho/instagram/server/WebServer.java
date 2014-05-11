@@ -62,7 +62,7 @@ public class WebServer {
 //                Images images = response.getData()[0].getImages();
                 return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                         .create()
-                        .toJson(response.getData());
+                        .toJson(response.getData()[0]);
             }
             return "";
         }
