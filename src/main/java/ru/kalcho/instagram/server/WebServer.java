@@ -11,6 +11,7 @@ import ru.kalcho.instagram.response.Response;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Collections;
 
 /**
  *
@@ -35,17 +36,18 @@ public class WebServer {
                 if ("GET".equalsIgnoreCase(exchange.getRequestMethod()) &&
                         "/latest-photo".equals(exchange.getRequestURI().getPath())) {
                     response = latestPhoto();
-                    exchange.sendResponseHeaders(200, response.length());
+                    exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json; charset=utf-8"));
+                    exchange.sendResponseHeaders(200, response.getBytes().length);
                 } else {
                     response = "404 Not Found";
-                    exchange.sendResponseHeaders(404, response.length());
+                    exchange.sendResponseHeaders(404, response.getBytes().length);
                 }
                 exchange.getResponseBody().write(response.getBytes());
             } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 String response = "500 Server error";
-                exchange.sendResponseHeaders(500, response.length());
+                exchange.sendResponseHeaders(500, response.getBytes().length);
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
             }
@@ -57,10 +59,10 @@ public class WebServer {
 
             Response response = new Instagram(clientId).recentMedia(userId, 1);
             if (response.getData() != null && response.getData().length > 0) {
-                Images images = response.getData()[0].getImages();
+//                Images images = response.getData()[0].getImages();
                 return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                         .create()
-                        .toJson(images);
+                        .toJson(response.getData());
             }
             return "";
         }
