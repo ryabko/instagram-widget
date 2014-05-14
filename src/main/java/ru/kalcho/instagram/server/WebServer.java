@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import ru.kalcho.instagram.Instagram;
-import ru.kalcho.instagram.response.Images;
 import ru.kalcho.instagram.response.Response;
 
 import java.io.IOException;
@@ -17,6 +16,8 @@ import java.util.Collections;
  *
  */
 public class WebServer {
+
+    private static final String DEFAULT_CHARSET = "UTF-8";
 
     HttpServer server;
 
@@ -37,18 +38,18 @@ public class WebServer {
                         "/latest-photo".equals(exchange.getRequestURI().getPath())) {
                     response = latestPhoto();
                     exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json; charset=utf-8"));
-                    exchange.sendResponseHeaders(200, response.getBytes().length);
+                    exchange.sendResponseHeaders(200, response.getBytes(DEFAULT_CHARSET).length);
                 } else {
                     response = "404 Not Found";
-                    exchange.sendResponseHeaders(404, response.getBytes().length);
+                    exchange.sendResponseHeaders(404, response.getBytes(DEFAULT_CHARSET).length);
                 }
-                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().write(response.getBytes(DEFAULT_CHARSET));
             } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 String response = "500 Server error";
-                exchange.sendResponseHeaders(500, response.getBytes().length);
-                exchange.getResponseBody().write(response.getBytes());
+                exchange.sendResponseHeaders(500, response.getBytes(DEFAULT_CHARSET).length);
+                exchange.getResponseBody().write(response.getBytes(DEFAULT_CHARSET));
                 exchange.getResponseBody().close();
             }
         }
